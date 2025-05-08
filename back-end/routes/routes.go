@@ -33,8 +33,8 @@ func SetupRoutes(app *fiber.App) {
 	protected.Delete("/task/:task_id", controllers.DeleteTask)
 	protected.Get("/history", controllers.GetTaskHistory)
 
-//     protected.Post("/subtask/:task_id", controllers.CreateSubtask)
-//     protected.Get("/subtask/:task_id", controllers.GetSubtasks)
-//     protected.Put("/subtask/:task_id/:subtask_id", controllers.UpdateSubtask)
-//     protected.Delete("/subtask/:task_id/:subtask_id", controllers.DeleteSubtask)
+    protected.Post("/subtask", controllers.CreateSubtask)
+    protected.Get("/subtask/:task_id", controllers.GetSubtasks)
+    protected.Put("/subtask/:subtask_id", controllers.UpdateSubtask)
+    protected.Delete("/subtask/:subtask_id", controllers.DeleteSubtask)
 }
