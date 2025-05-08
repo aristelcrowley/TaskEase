@@ -1,0 +1,39 @@
+package routes
+
+import (
+    // "taskease/controllers"
+    // "taskease/middlewares"
+
+    "github.com/gofiber/fiber/v2"
+)
+
+func SetupRoutes(app *fiber.App) {
+    // app.Post("/register", controllers.Register)
+    // app.Post("/login", controllers.Login)
+    // app.Get("/homepage", controllers.Homepage)
+
+    // protected := app.Group("/api", middlewares.VerifyToken)
+
+    // admin := protected.Group("/user", middlewares.IsAdmin)
+    // admin.Post("/", controllers.CreateUser)
+    // admin.Get("/", controllers.GetUsers)
+    // admin.Put("/:id", controllers.UpdateUser)
+    // admin.Delete("/:id", controllers.DeleteUser)
+
+    // protected.Post("/project/:user_id", controllers.CreateProject)
+    // protected.Get("/project/:user_id", controllers.GetProjects)
+    // protected.Put("/project/:user_id/:project_id", controllers.UpdateProject)
+    // protected.Delete("/project/:user_id/:project_id", controllers.DeleteProject)
+
+    // protected.Post("/task/:project_id", controllers.CreateTask)
+    // protected.Get("/task/:project_id", controllers.GetTasks)
+    // protected.Get("/task/:project_id/:task_id", controllers.GetTaskByID)
+    // protected.Put("/task/:project_id/:task_id", controllers.UpdateTask)
+    // protected.Delete("/task/:project_id/:task_id", controllers.DeleteTask)
+    // protected.Get("/history", controllers.GetTaskHistory)
+
+    // protected.Post("/subtask/:task_id", controllers.CreateSubtask)
+    // protected.Get("/subtask/:task_id", controllers.GetSubtasks)
+    // protected.Put("/subtask/:task_id/:subtask_id", controllers.UpdateSubtask)
+    // protected.Delete("/subtask/:task_id/:subtask_id", controllers.DeleteSubtask)
+}
