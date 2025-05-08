@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"fmt"
+	
 	"taskease/database"
 	"taskease/models"
-	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -102,7 +104,6 @@ func UpdateUser(c *fiber.Ctx) error {
 		})
 	}
 
-	// Only update fields that are provided
 	if username != "" {
 		user.Username = username
 	}
