@@ -27,7 +27,7 @@ func SetupRoutes(app *fiber.App) {
     protected.Delete("/project/:project_id", controllers.DeleteProject)
 
 	protected.Post("/task", controllers.CreateTask)
-	protected.Get("/task", controllers.GetTasks)
+	protected.Get("/task/:project_id", controllers.GetTasks)
 	protected.Get("/task/:task_id", controllers.GetTaskByID)
 	protected.Put("/task/:task_id", controllers.UpdateTask)
 	protected.Delete("/task/:task_id", controllers.DeleteTask)
