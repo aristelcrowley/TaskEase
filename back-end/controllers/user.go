@@ -3,9 +3,8 @@ package controllers
 import (
 	"os"
 	"time"
-
-	"taskease/models"
 	"taskease/database"
+	"taskease/models"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
@@ -21,14 +20,20 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
-	user := models.User{
-		Username:  username,
-		Password:  password,
-		IsAdmin:   false,
-		CreatedAt: time.Now(),
+	var existingUser models.User
+	if err := database.DB.Where("username = ?", username).First(&existingUser).Error; err == nil {
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
+			"error": "Username already taken",
+		})
 	}
 
-	if err := database.DB.Create(&user).Error; err != nil {
+	newUser := models.User{
+		Username: username,
+		Password: password,
+		Role:     "user", 
+	}
+
+	if err := database.DB.Create(&newUser).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to register user",
 		})
@@ -50,28 +55,22 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	var user models.User
-	if err := database.DB.Where("username = ?", username).First(&user).Error; err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "User not found",
-		})
-	}
-
-	if user.Password != password {
+	if err := database.DB.Where("username = ? AND password = ?", username, password).First(&user).Error; err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid credentials",
 		})
 	}
 
-	claims := jwt.MapClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub":  user.UserID,
-		"role": user.IsAdmin,
+		"role": user.Role,
 		"exp":  time.Now().Add(time.Hour * 24).Unix(),
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	})
+
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Error generating token",
+			"error": "Failed to generate token",
 		})
 	}
 
@@ -80,8 +79,9 @@ func Login(c *fiber.Ctx) error {
 	})
 }
 
+
 func Logout(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
-		"message": "Logout successful. Please clear the token on the frontend.",
+		"message": "Logged out successfully",
 	})
 }

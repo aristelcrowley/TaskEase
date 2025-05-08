@@ -32,7 +32,7 @@ func VerifyToken(c *fiber.Ctx) error {
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok || !token.Valid {
+	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid claims",
 		})
