@@ -12,6 +12,7 @@ func main() {
     app := fiber.New()
 
     database.ConnectDB()
+    database.MigrateDB()
 
     app.Listen(":3000")
 }

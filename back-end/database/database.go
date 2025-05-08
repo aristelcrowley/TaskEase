@@ -5,6 +5,8 @@ import (
     "log"
     "os"
 
+	"taskease/models"
+
     "gorm.io/driver/mysql"
     "gorm.io/gorm"
 )
@@ -23,3 +25,6 @@ func ConnectDB() *gorm.DB {
     return DB
 }
 
+func MigrateDB() error {
+    return DB.AutoMigrate(&models.User{}, &models.Project{}, &models.Task{}, &models.Subtask{})
+}
