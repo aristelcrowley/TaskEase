@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Subtask struct {
-	ID        int       `json:"id"`
+	ID        int       `gorm:"primaryKey" json:"id"`
 	TaskID    int       `json:"task_id"`
 	Title     string    `json:"title"`
 	Status    string    `json:"status"`

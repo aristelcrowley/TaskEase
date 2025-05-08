@@ -2,7 +2,7 @@ package models
 import "time"
 
 type Task struct {
-	TaskID      int       `json:"task_id"`
+	TaskID      int       `gorm:"primaryKey" json:"task_id"`
 	ProjectID   int       `json:"project_id"`
 	TaskName    string    `json:"task_name"`
 	Status      string    `json:"status"`
