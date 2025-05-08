@@ -2,29 +2,32 @@ package database
 
 import (
     "fmt"
-    "log"
     "os"
-
-	"taskease/models"
 
     "gorm.io/driver/mysql"
     "gorm.io/gorm"
+    "github.com/joho/godotenv"
 )
 
 var DB *gorm.DB
 
-
-func ConnectDB() *gorm.DB {
-    var err error
-    dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", 
-        os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
-    DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+func ConnectDB() error {
+    err := godotenv.Load()
     if err != nil {
-        log.Fatal("Error connecting to database: ", err)
+        return fmt.Errorf("Error loading .env file: %v", err)
     }
-    return DB
-}
 
-func MigrateDB() error {
-    return DB.AutoMigrate(&models.User{}, &models.Project{}, &models.Task{}, &models.Subtask{})
+    dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+        os.Getenv("DB_USER"),
+        os.Getenv("DB_PASSWORD"),
+        os.Getenv("DB_HOST"),
+        os.Getenv("DB_NAME"))
+
+    var errConnect error
+    DB, errConnect = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+    if errConnect != nil {
+        return fmt.Errorf("Error connecting to the database: %v", errConnect)
+    }
+
+    return nil
 }

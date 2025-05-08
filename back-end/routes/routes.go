@@ -1,24 +1,19 @@
 package routes
 
 import (
-    // "taskease/controllers"
-    // "taskease/middlewares"
+    "taskease/controllers"
+    "taskease/middlewares"
 
     "github.com/gofiber/fiber/v2"
 )
 
 func SetupRoutes(app *fiber.App) {
-    // app.Post("/register", controllers.Register)
-    // app.Post("/login", controllers.Login)
-    // app.Get("/homepage", controllers.Homepage)
+    app.Post("/register", controllers.Register)
+    app.Post("/login", controllers.Login)
 
-    // protected := app.Group("/api", middlewares.VerifyToken)
+    protected := app.Group("/api", middlewares.VerifyToken)
 
-    // admin := protected.Group("/user", middlewares.IsAdmin)
-    // admin.Post("/", controllers.CreateUser)
-    // admin.Get("/", controllers.GetUsers)
-    // admin.Put("/:id", controllers.UpdateUser)
-    // admin.Delete("/:id", controllers.DeleteUser)
+	protected.Post("/logout", controllers.Logout)
 
     // protected.Post("/project/:user_id", controllers.CreateProject)
     // protected.Get("/project/:user_id", controllers.GetProjects)
@@ -36,4 +31,10 @@ func SetupRoutes(app *fiber.App) {
     // protected.Get("/subtask/:task_id", controllers.GetSubtasks)
     // protected.Put("/subtask/:task_id/:subtask_id", controllers.UpdateSubtask)
     // protected.Delete("/subtask/:task_id/:subtask_id", controllers.DeleteSubtask)
+
+	// admin := protected.Group("/user", middlewares.IsAdmin)
+    // admin.Post("/", controllers.CreateUser)
+    // admin.Get("/", controllers.GetUsers)
+    // admin.Put("/:id", controllers.UpdateUser)
+    // admin.Delete("/:id", controllers.DeleteUser)
 }

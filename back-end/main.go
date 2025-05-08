@@ -1,6 +1,8 @@
 package main
 
 import (
+    "log"
+
     "taskease/config"
     "taskease/database"
     "taskease/routes"
@@ -13,9 +15,11 @@ func main() {
     app := fiber.New()
 
     database.ConnectDB()
-    database.MigrateDB()
 
     routes.SetupRoutes(app)
-    
-    app.Listen(":3000")
+
+    log.Println("Server starting on port 3000")
+    if err := app.Listen(":3000"); err != nil {
+        log.Fatalf("Failed to start server: %v", err)
+    }
 }
