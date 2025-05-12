@@ -11,7 +11,7 @@ func SetupRoutes(app *fiber.App) {
     app.Post("/register", controllers.Register)
     app.Post("/login", controllers.Login)
 
-    protected := app.Group("/api", middlewares.VerifyToken)
+    protected := app.Group("/api", middlewares.VerifyToken())
 
 	protected.Post("/logout", controllers.Logout)
 

@@ -40,7 +40,7 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.JSON(fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "User registered successfully",
 	})
 }
@@ -68,7 +68,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	claims := jwt.MapClaims{
-		"sub":  user.UserID,
+		"user_id":  user.UserID,
 		"role": user.Role,
 		"exp":  time.Now().Add(time.Hour * 3).Unix(),
 	}
@@ -81,13 +81,29 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.JSON(fiber.Map{
+		c.Cookie(&fiber.Cookie{
+		Name:     "token",
+		Value:    tokenString,
+		Expires:  time.Now().Add(24 * time.Hour),
+		HTTPOnly: true,
+	})
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"token":   tokenString,
 	})
+
+
 }
 
 func Logout(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
+	c.Cookie(&fiber.Cookie{
+		Name: "token",
+		Value: "",
+		Expires: time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	})
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Logged out successfully",
 	})
 }

@@ -72,7 +72,7 @@ func CreateTask(c *fiber.Ctx) error {
 }
 
 func GetTasks(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 
 	projectIDStr := c.Params("project_id")
 	projectID, err := strconv.Atoi(projectIDStr)

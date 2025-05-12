@@ -2,49 +2,31 @@ package middlewares
 
 import (
 	"os"
-	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
+	jwtware "github.com/gofiber/jwt/v3"
+	jwt "github.com/golang-jwt/jwt/v4"
 )
 
-func VerifyToken(c *fiber.Ctx) error {
-	authHeader := c.Get("Authorization")
-	if authHeader == "" {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Authorization token required",
-		})
-	}
+func VerifyToken() fiber.Handler {
+	return jwtware.New(jwtware.Config{
+		SigningKey:  []byte(os.Getenv("JWT_SECRET_KEY")),
+		TokenLookup: "cookie:token",
+		SuccessHandler: func(c *fiber.Ctx) error {
+			user := c.Locals("user").(*jwt.Token)
+			claims := user.Claims.(jwt.MapClaims)
+			if idFloat, ok := claims["user_id"].(float64); ok {
+				c.Locals("user_id", int(idFloat))
+			}
 
-	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fiber.ErrUnauthorized
-		}
-		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
+			return c.Next()
+		},
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"message": "Unauthorized",
+			})
+		},
 	})
-
-	if err != nil || !token.Valid {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Invalid token",
-		})
-	}
-
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Invalid claims",
-		})
-	}
-
-	userID := int(claims["sub"].(float64))
-	role := claims["role"].(string)
-
-	c.Locals("userID", userID)
-	c.Locals("role", role)
-
-	return c.Next()
 }
 
 func IsAdmin(c *fiber.Ctx) error {
