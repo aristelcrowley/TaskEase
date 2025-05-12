@@ -1,7 +1,7 @@
 package main
 
 import (
-    "log"
+    "os"
 
     "taskease/config"
     "taskease/database"
@@ -18,8 +18,6 @@ func main() {
 
     routes.SetupRoutes(app)
 
-    log.Println("Server starting on port 3000")
-    if err := app.Listen(":3000"); err != nil {
-        log.Fatalf("Failed to start server: %v", err)
-    }
+    port := os.Getenv("SERVER_PORT")
+	app.Listen(":"+port)
 }
