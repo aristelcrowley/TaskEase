@@ -11,7 +11,7 @@ import (
 )
 
 func CreateProject(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 
 	projectName := c.FormValue("project_name")
 
@@ -41,7 +41,7 @@ func CreateProject(c *fiber.Ctx) error {
 }
 
 func GetProjects(c *fiber.Ctx) error {
-	tokenUserID := c.Locals("userID").(int)
+	tokenUserID := c.Locals("user_id").(int)
 
 	var projects []models.Project
 	if err := database.DB.Where("user_id = ?", tokenUserID).Find(&projects).Error; err != nil {
@@ -56,7 +56,7 @@ func GetProjects(c *fiber.Ctx) error {
 }
 
 func UpdateProject(c *fiber.Ctx) error {
-	tokenUserID := c.Locals("userID").(int)
+	tokenUserID := c.Locals("user_id").(int)
 
 	projectIDStr := c.Params("project_id")
 	projectID, err := strconv.Atoi(projectIDStr)
@@ -98,7 +98,7 @@ func UpdateProject(c *fiber.Ctx) error {
 }
 
 func DeleteProject(c *fiber.Ctx) error {
-	tokenUserID := c.Locals("userID").(int)
+	tokenUserID := c.Locals("user_id").(int)
 
 	projectIDStr := c.Params("project_id")
 	projectID, err := strconv.Atoi(projectIDStr)

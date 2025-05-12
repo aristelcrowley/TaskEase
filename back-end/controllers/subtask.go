@@ -10,7 +10,7 @@ import (
 )
 
 func CreateSubtask(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 	taskIDStr := c.FormValue("task_id")
 	title := c.FormValue("title")
 
@@ -67,7 +67,7 @@ func CreateSubtask(c *fiber.Ctx) error {
 }
 
 func GetSubtasks(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 	taskIDStr := c.Params("task_id")
 
 	taskID, err := strconv.Atoi(taskIDStr)
@@ -115,7 +115,7 @@ func GetSubtasks(c *fiber.Ctx) error {
 }
 
 func UpdateSubtask(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 	subtaskIDStr := c.Params("subtask_id")
 
 	subtaskID, err := strconv.Atoi(subtaskIDStr)
@@ -181,7 +181,7 @@ func UpdateSubtask(c *fiber.Ctx) error {
 }
 
 func DeleteSubtask(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 	subtaskIDStr := c.Params("subtask_id")
 
 	subtaskID, err := strconv.Atoi(subtaskIDStr)

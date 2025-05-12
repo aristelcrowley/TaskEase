@@ -11,7 +11,7 @@ import (
 )
 
 func CreateTask(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 
 	projectIDStr := c.FormValue("project_id")
 	taskName := c.FormValue("task_name")
@@ -113,7 +113,7 @@ func GetTasks(c *fiber.Ctx) error {
 }
 
 func GetTaskByID(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 	taskIDStr := c.Params("task_id")
 
 	taskID, err := strconv.Atoi(taskIDStr)
@@ -150,7 +150,7 @@ func GetTaskByID(c *fiber.Ctx) error {
 
 
 func UpdateTask(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 	taskIDStr := c.Params("task_id")
 
 	taskID, err := strconv.Atoi(taskIDStr)
@@ -219,7 +219,7 @@ func UpdateTask(c *fiber.Ctx) error {
 
 
 func DeleteTask(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 	taskIDStr := c.Params("task_id")
 
 	taskID, err := strconv.Atoi(taskIDStr)
@@ -260,7 +260,7 @@ func DeleteTask(c *fiber.Ctx) error {
 }
 
 func GetTaskHistory(c *fiber.Ctx) error {
-	userID := c.Locals("userID").(int)
+	userID := c.Locals("user_id").(int)
 
 	var tasks []models.Task
 	if err := database.DB.Joins("JOIN projects ON tasks.project_id = projects.project_id").
