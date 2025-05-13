@@ -1,0 +1,383 @@
+/* Reset & base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    max-width: 100%;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    background-color: #ffffff;
+    line-height: 1.6;
+    color: #333;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 1rem 5%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+.logo span {
+    color: #f1c40f;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-links a {
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    color: #2c3e50;
+}
+
+.nav-links a:hover {
+    background-color: #f1c40f;
+    color: white;
+}
+
+.btn {
+    background-color:;
+    color: #2c3e50;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 5p #f1c40fx;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #e6b90f;
+    transform: translateY(-2px);
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh; /* full height */
+    background-image: url('../assets/images/Home.jpg'); /* ganti sesuai path gambarmu */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* overlay gelap agar teks terbaca */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    padding: 0 1rem;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    .hero p {
+        font-size: 1rem;
+    }
+}
+
+/* Features Section */
+/* Features Section */
+.features {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 4rem 5%;
+    margin-bottom: 3rem;
+}
+
+.feature-card {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    width: 320px;
+    height: 400px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    animation: fadeInUp 1s ease forwards;
+    opacity: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.feature-card h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+    color: white;
+    z-index: 2;
+    position: relative;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.feature-card p {
+    font-size: 1rem;
+    color: #222; /* hitam lembut */
+    z-index: 2;
+    position: relative;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 0.5rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.feature-one {
+    background-image: url('../assets/images/A5.jpg');
+}
+
+.feature-two {
+    background-image: url('../assets/images/A5.jpg');
+}
+
+.feature-three {
+    background-image: url('../assets/images/A5.jpg');
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feature-highlight {
+    background-color: #ffffff; /* Lembut, menyatu dengan putih */
+    padding: 3rem 5%;
+    margin: 2rem 5%;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.highlight-box h2 {
+    font-size: 2rem;
+    color: #2c2c2c;
+    margin-bottom: 1rem;
+}
+
+.highlight-box p {
+    font-size: 1.1rem;
+    color: #555;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+
+.focus-section {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 4rem 0;
+    border-radius: 20px;
+}
+
+.video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.video-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1); /* ubah tingkat kegelapan di sini */
+    z-index: 2;
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(2px);
+    opacity: 0.4;
+    z-index: 1;
+    position: relative;
+}
+
+.focus-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    max-width: 700px;
+    color: white;
+}
+
+.focus-content h2 {
+    font-size: 2.5rem;
+    color: black;
+    margin-bottom: 1rem;
+}
+
+.focus-content p {
+    font-size: 1.1rem;
+    color: #111;
+    margin-bottom: 1.5rem;
+}
+
+
+/* Footer */
+.footer {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 4rem 5%;
+    font-size: 0.95rem;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.footer-logo {
+    flex: 1 1 250px;
+}
+
+.footer-logo h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.footer-logo span {
+    color: #f1c40f;
+}
+
+.footer-logo p {
+    color: #777;
+    max-width: 300px;
+}
+
+.footer-links {
+    flex: 1 1 150px;
+}
+
+.footer-links h4 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links ul li a {
+    color: #555;
+    text-decoration: none;
+}
+
+.footer-links ul li a:hover {
+    color: #2c3e50;
+}
+
+.footer-social {
+    flex: 1 1 150px;
+}
+
+.footer-social h4 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.social-icons a {
+    color: #555;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #2c3e50;
+}
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid #ddd;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    color: #777;
+}
+
+.footer-bottom span {
+    color: #2c3e50;
+}
