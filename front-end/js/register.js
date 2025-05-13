@@ -8,13 +8,6 @@ document.getElementById('register-form').addEventListener('submit', async functi
     const modalMessage = document.getElementById('modal-message');
     const modalClose = document.getElementById('modal-close');
 
-    errorMessage.textContent = "";
-
-    if (username === "" || password === "") {
-        showModal("Username and password are required!");
-        return;
-    }
-
     const formData = new URLSearchParams();
     formData.append("username", username);
     formData.append("password", password);
