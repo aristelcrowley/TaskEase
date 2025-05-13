@@ -4,38 +4,53 @@ document.getElementById('register-form').addEventListener('submit', async functi
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('username-error');
+    const modal = document.getElementById('modal');
+    const modalMessage = document.getElementById('modal-message');
+    const modalClose = document.getElementById('modal-close');
 
-    // Clear previous error message
     errorMessage.textContent = "";
 
-    // Validate input
     if (username === "" || password === "") {
-        errorMessage.textContent = "Username and password are required!";
+        showModal("Username and password are required!");
         return;
     }
 
-    // Check if username is already taken via the Go backend API
+    const formData = new URLSearchParams();
+    formData.append("username", username);
+    formData.append("password", password);
+
     try {
-        console.log("Sending request:", { username, password });
         const response = await fetch('http://localhost:8080/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify({ username, password }),
-        });        
+            body: formData.toString(),
+        });
+
         const data = await response.json();
-        console.log("Response:", data);
 
         if (response.ok) {
-            // Successfully registered, redirect to login page
-            window.location.href = 'login.html';
+            showModal("Registrasi berhasil! Silakan login sekarang.");
         } else if (data.error) {
-            // Handle backend error (e.g., username already taken)
-            errorMessage.textContent = data.error;
+            showModal(data.error);
         }
     } catch (error) {
-        // Handle network or server error
-        errorMessage.textContent = "An error occurred. Please try again.";
+        showModal("Terjadi kesalahan saat menghubungi server.");
     }
+
+    function showModal(message) {
+        modalMessage.textContent = message;
+        modal.classList.remove("hidden");
+    }
+
+    modalClose.addEventListener('click', function () {
+        modal.classList.add("hidden");
+    });
+
+    window.addEventListener('click', function (e) {
+        if (e.target === modal) {
+            modal.classList.add("hidden");
+        }
+    });
 });
