@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskEase - Login</title>
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+<body>
+  <div class="container">
+    <form class="form" id="login-form">
+      <div class="logo">Task<span>Ease</span></div>
+      <h1>Masuk</h1>
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <div id="login-error" class="error-message"></div>
+      <button type="submit">Login</button>
+      <p class="link">Belum punya akun? <a href="register.html">Daftar</a></p>
+    </form>
+  </div>
+  
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close-button" id="close-modal">&times;</span>
+      <p id="modal-message"></p>
+    </div>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
