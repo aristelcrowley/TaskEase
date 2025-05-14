@@ -11,7 +11,7 @@ const errorModal = document.getElementById('errorModal');
 const errorMessageDisplay = document.getElementById('errorMessage');
 const closeErrorModalBtn = document.getElementById('closeErrorModalBtn');
 
-const API_BASE_URL = 'http://localhost:8080/api'; 
+const API_BASE_URL = 'http://localhost:8080/api';
 
 function showErrorModal(message) {
     errorMessageDisplay.textContent = message;
@@ -29,7 +29,8 @@ async function fetchProjects() {
         const response = await fetch(`${API_BASE_URL}/project`, {
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            credentials: 'include' // Include cookies in the request
         });
 
         if (!response.ok) {
@@ -106,7 +107,8 @@ async function deleteProject(projectId) {
     if (confirmDelete) {
         try {
             const response = await fetch(`${API_BASE_URL}/project/${projectId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'include' // Include cookies
             });
 
             if (!response.ok) {
@@ -167,6 +169,7 @@ async function saveProjectChanges() {
         response = await fetch(url, {
             method: method,
             body: formData,
+            credentials: 'include' // Include cookies
         });
 
         if (!response.ok) {
