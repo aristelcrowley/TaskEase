@@ -47,16 +47,16 @@ async function isProjectPageAuth(req, res, next) {
             if (response.ok) {
                 const data = await response.json();
                 if (data && data.isOwner) {
-                    return next(); // User is the owner
+                    return next(); 
                 } else {
-                    return res.status(404).send('Project not found or access denied');
+                    return res.status(404).send('error: Project not urs. Access denied');
                 }
             } else if (response.status === 401) {
                 return res.redirect('/login');
             } else {
                 const responseText = await response.text();
-                console.error('Go API error:', response.status, responseText);
-                return res.status(response.status).send(`Project check failed with status ${response.status}: ${responseText}`);
+                console.error('error:', response.status, responseText);
+                return res.status(response.status).send(`${response.status}: ${responseText}`);
             }
         } catch (fetchErr) {
             console.error('Fetch error:', fetchErr);
