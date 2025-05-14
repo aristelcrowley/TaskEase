@@ -1,22 +1,25 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const fetchPromise = import('node-fetch'); // Dynamic import
+const fetchPromise = import('node-fetch'); 
 
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
-const API_BASE_URL = process.env.API_BASE_URL; // Load from .env
+const API_BASE_URL = process.env.API_BASE_URL; 
 
 function isAuth(req, res, next) {
-    const token = req.cookies?.token;
+    const token = req.cookies?.token || extractTokenFromHeader(req);
     if (!token) {
         return res.redirect('/login');
     }
-
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
+        const requestedUserId = req.params.user_id;
+        if (String(decoded.user_id) !== requestedUserId) {
+            return res.status(403).send('Unauthorized access');
+        }
         req.user = decoded;
-        return next();
+        next();
     } catch (err) {
-        console.error('JWT verification error:', err);
+        console.error(err);
         return res.redirect('/login');
     }
 }
