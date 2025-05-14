@@ -9,6 +9,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -28,9 +29,17 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
+	// Hash the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to hash password",
+		})
+	}
+
 	newUser := models.User{
 		Username: username,
-		Password: password,
+		Password: string(hashedPassword), // Store the hash as a string
 		Role:     "user",
 	}
 
@@ -54,23 +63,24 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	var user models.User
-
 	if err := database.DB.Where("username = ?", loginData.Username).First(&user).Error; err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid username or password",
 		})
 	}
 
-	if user.Password != loginData.Password {
+	// Compare the provided password with the stored hashed password
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginData.Password))
+	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid username or password",
 		})
 	}
 
 	claims := jwt.MapClaims{
-		"user_id":  user.UserID,
-		"role": user.Role,
-		"exp":  time.Now().Add(time.Hour * 3).Unix(),
+		"user_id": user.UserID,
+		"role":    user.Role,
+		"exp":     time.Now().Add(time.Hour * 3).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -81,7 +91,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-		c.Cookie(&fiber.Cookie{
+	c.Cookie(&fiber.Cookie{
 		Name:     "token",
 		Value:    tokenString,
 		Expires:  time.Now().Add(24 * time.Hour),
@@ -89,16 +99,14 @@ func Login(c *fiber.Ctx) error {
 	})
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"token":   tokenString,
+		"token": tokenString,
 	})
-
-
 }
 
 func Logout(c *fiber.Ctx) error {
 	c.Cookie(&fiber.Cookie{
-		Name: "token",
-		Value: "",
+		Name:    "token",
+		Value:   "",
 		Expires: time.Now().Add(-time.Hour),
 		HTTPOnly: true,
 	})
