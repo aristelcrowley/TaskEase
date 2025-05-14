@@ -131,3 +131,27 @@ func DeleteProject(c *fiber.Ctx) error {
 		"message": "Project deleted successfully",
 	})
 }
+
+func CheckProjectOwnership(c *fiber.Ctx) error {
+	userID := c.Locals("user_id").(int)
+	projectIDStr := c.Params("project_id")
+	projectID, err := strconv.Atoi(projectIDStr)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid project ID",
+		})
+	}
+
+	var project models.Project
+	if err := database.DB.First(&project, "project_id = ?", projectID).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Project not found",
+		})
+	}
+
+	isOwner := project.UserID == userID
+
+	return c.JSON(fiber.Map{
+		"isOwner": isOwner,
+	})
+}

@@ -72,10 +72,9 @@ function renderProjects(projects) {
             </div>
         `;
 
-        // Row click for navigation to tasks (adjust URL as needed)
         projectRow.addEventListener('click', function(e) {
             if (!e.target.closest('.btn-delete') && !e.target.closest('.btn-edit')) {
-                window.location.href = `task.html?project=${encodeURIComponent(project.project_name)}&projectId=${project.project_id}`;
+                window.location.href = `../task/${project.project_id}`;
             }
         });
         projectRow.style.cursor = 'pointer';

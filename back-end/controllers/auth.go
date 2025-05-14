@@ -69,7 +69,6 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	// Compare the provided password with the stored hashed password
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginData.Password))
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -96,6 +95,9 @@ func Login(c *fiber.Ctx) error {
 		Value:    tokenString,
 		Expires:  time.Now().Add(24 * time.Hour),
 		HTTPOnly: true,
+		Path:     "/", // Make the cookie accessible across the entire domain
+		// Secure:   true, // Uncomment if using HTTPS
+		SameSite: "Lax", // Or "Strict" depending on your needs
 	})
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{

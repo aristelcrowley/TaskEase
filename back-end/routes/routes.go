@@ -15,16 +15,11 @@ func SetupRoutes(app *fiber.App) {
 
 	protected.Post("/logout", controllers.Logout)
 
-	admin := protected.Group("/user", middlewares.IsAdmin)
-    admin.Post("/", controllers.CreateUser)
-    admin.Get("/", controllers.GetUsers)
-    admin.Put("/:id", controllers.UpdateUser)
-    admin.Delete("/:id", controllers.DeleteUser)
-
     protected.Post("/project", controllers.CreateProject)
     protected.Get("/project", controllers.GetProjects)
     protected.Put("/project/:project_id", controllers.UpdateProject)
     protected.Delete("/project/:project_id", controllers.DeleteProject)
+    protected.Get("/project/check-ownership/:project_id", controllers.CheckProjectOwnership)
 
 	protected.Post("/task", controllers.CreateTask)
 	protected.Get("/task/:project_id", controllers.GetTasks)
@@ -37,4 +32,10 @@ func SetupRoutes(app *fiber.App) {
     protected.Get("/subtask/:task_id", controllers.GetSubtasks)
     protected.Put("/subtask/:subtask_id", controllers.UpdateSubtask)
     protected.Delete("/subtask/:subtask_id", controllers.DeleteSubtask)
+
+    admin := protected.Group("/user", middlewares.IsAdmin)
+    admin.Post("/", controllers.CreateUser)
+    admin.Get("/", controllers.GetUsers)
+    admin.Put("/:id", controllers.UpdateUser)
+    admin.Delete("/:id", controllers.DeleteUser)
 }
