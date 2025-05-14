@@ -21,14 +21,11 @@ document.getElementById("login-form").addEventListener("submit", async function 
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: formData.toString(),
+      credentials: 'include' 
     });
 
     const data = await response.json();
     if (response.ok && data.token) {
-      const expireDate = new Date();
-      expireDate.setHours(expireDate.getHours() + 3); 
-      document.cookie = `token=${data.token}; path=/; expires=${expireDate.toUTCString()};`;
-
       modalMessage.textContent = "Login berhasil!";
       modal.style.display = "flex";
 
@@ -36,13 +33,14 @@ document.getElementById("login-form").addEventListener("submit", async function 
       const userId = payload.user_id;
 
       setTimeout(() => {
-        window.location.href = `/project:${userId}`;
+        window.location.href = `/project/${userId}`;
       }, 1500);
     } else {
       modalMessage.textContent = data.error || "Login gagal.";
       modal.style.display = "flex";
     }
   } catch (error) {
+    console.error("Login error:", error);
     modalMessage.textContent = "Terjadi kesalahan. Silakan coba lagi.";
     modal.style.display = "flex";
   }

@@ -1,13 +1,15 @@
+require('dotenv').config();
+
 const express = require("express");
 const path = require("path");
+const cookieParser = require("cookie-parser");
+const { isAuth } = require("./auth.js");
 
 const app = express();
 const PORT = 3000;
 
-// Serve static files (HTML, CSS, JS, images, etc.)
-app.use(express.static(path.join(__dirname, "../")));
+app.use(cookieParser()); 
 
-// Serve home.html only for root route
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../", "home.html"));
 });
@@ -15,9 +17,16 @@ app.get("/", (req, res) => {
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../", "login.html"));
 });
+
 app.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname, "../", "register.html"));
 });
+
+app.get("/project/:user_id", isAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "../", "project.html"));
+});
+
+app.use(express.static(path.join(__dirname, "../")));
 
 app.use((req, res) => {
   res.status(404).send("Page not found");
