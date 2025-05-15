@@ -34,6 +34,11 @@ app.get("/history/:user_id", isAuth, (req, res) => {
     res.sendFile(path.join(__dirname, "../", "history.html"));
 });
 
+app.get("/note/:user_id", isAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, "../", "note.html"));
+});
+
+
 app.use(express.static(path.join(__dirname, "../")));
 
 app.use((req, res) => {

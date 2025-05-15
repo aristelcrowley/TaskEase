@@ -51,6 +51,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const noteLink = document.getElementById('note-link');
+    if (noteLink) {
+        noteLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            const userId = getUserIdFromTokenCookie();
+            if (userId) {
+                this.href = `/note/${userId}`;
+                window.location.href = this.href;
+            } else {
+                console.error('User ID not found in token cookie.');
+            }
+        });
+    }
+
     const historyLink = document.querySelector('.nav-items a[href="/history"]');
     if (historyLink) {
         historyLink.addEventListener('click', function(event) {
