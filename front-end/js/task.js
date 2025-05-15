@@ -8,7 +8,7 @@ const deleteTaskBtn = document.getElementById('delete-task-btn');
 const addSubtaskBtn = document.getElementById('add-subtask-btn');
 const subtasksContainer = document.getElementById('subtasks-container');
 let currentTaskId = null;
-let currentProjectId = null; // Define currentProjectId in the global scope
+let currentProjectId = null; 
 
 const profileModal = document.getElementById('profileModal');
 const closeProfileModal = document.getElementById('closeProfileModal');
@@ -218,17 +218,14 @@ function openNewTaskModal() {
     document.getElementById('task-complete').checked = false;
 
     const completeGroup = document.querySelector('.modal-body2 > .form-group2:nth-child(4)');
-
     if (completeGroup) {
         completeGroup.style.display = 'none';
     }
-    
-    subtasksContainer.innerHTML = '';
-
-    
     if (deleteTaskBtn) {
         deleteTaskBtn.style.display = 'none';
     }
+    
+    subtasksContainer.innerHTML = '';
 
     currentTaskId = null;
     taskModal.style.display = 'block';
@@ -260,6 +257,10 @@ async function openTaskModal(taskId) {
         const subtasks = await fetchSubtasks(taskId);
         renderSubtasks(subtasks);
 
+        const completeGroup = document.querySelector('.modal-body2 > .form-group2:nth-child(4)');
+        if (completeGroup) {
+            completeGroup.style.display = 'block';
+        }
         if (deleteTaskBtn) {
             deleteTaskBtn.style.display = 'block';
         }
