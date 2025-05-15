@@ -104,6 +104,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    const logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function(event) {
+            event.preventDefault(); // 
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; 
+            window.location.href = '/'; 
+        });
+    }
+    
     init(); 
 });
 
