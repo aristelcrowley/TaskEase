@@ -9,7 +9,7 @@
 body {
     background-color: #ffffff;
     color: #333;
-    background-image: url('T1.jpg');
+    background-image: url('../assets/images/T1.jpg');
 }
 
 .container {
