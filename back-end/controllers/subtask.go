@@ -103,12 +103,6 @@ func GetSubtasks(c *fiber.Ctx) error {
 		})
 	}
 
-	if len(subtasks) == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"message": "Theres no subtask for this task",
-		})
-	}
-
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"subtasks": subtasks,
 	})

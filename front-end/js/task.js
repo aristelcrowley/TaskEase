@@ -60,10 +60,9 @@ async function fetchTasks(projectId) {
 function renderTasks(tasks) {
     tasksContainer.innerHTML = '';
     tasks.forEach(task => {
-        console.log('Task ID in renderTasks:', task.task_id); // Debugging log
         const taskCard = document.createElement('div');
         taskCard.className = 'task-card';
-        taskCard.dataset.id = task.task_id; // Assigning task ID to data-id
+        taskCard.dataset.id = task.task_id; 
 
         taskCard.innerHTML = `
             <div class="task-header">
@@ -75,7 +74,6 @@ function renderTasks(tasks) {
         `;
 
         taskCard.addEventListener('click', () => {
-            console.log('Clicked task card with ID:', task.task_id); // Debugging log
             openTaskModal(task.task_id);
         });
         tasksContainer.appendChild(taskCard);
@@ -166,7 +164,7 @@ function openNewTaskModal() {
     document.getElementById('task-complete').checked = false;
 
     const completeGroup = document.querySelector('.modal-body2 > .form-group2:nth-child(4)');
-    
+
     if (completeGroup) {
         completeGroup.style.display = 'none';
     }
@@ -187,13 +185,11 @@ async function openTaskModal(taskId) {
 
     currentTaskId = taskId;
 
-    console.log('Opening task modal for ID:', taskId); // Debugging log
 
     try {
         const response = await fetch(`${API_BASE_URL}/task/${taskId}`, {
             credentials: 'include'
         });
-        console.log('Fetch Response:', response); // Log the entire response object
         if (!response.ok) {
             const error = await response.json();
             console.error('Failed to fetch task details:', error);
@@ -201,7 +197,6 @@ async function openTaskModal(taskId) {
             return;
         }
         const taskData = await response.json();
-        console.log('Task Data:', taskData); // Log the received task data
         const task = taskData.task;
 
         document.getElementById('task-name').value = task.task_name;
@@ -303,7 +298,7 @@ async function saveTaskChanges() {
         alert('Please select a deadline for the task');
         return;
     }
-    const taskDeadline = taskDeadlineInput; 
+    const taskDeadline = taskDeadlineInput;
     const taskComplete = document.getElementById('task-complete').checked;
     const status = taskComplete ? 'Completed' : 'Pending';
 
@@ -323,19 +318,17 @@ async function saveTaskChanges() {
     formData.append('project_id', currentProjectId);
     formData.append('task_name', taskName);
     formData.append('deadline', taskDeadline);
-    formData.append('status', status); // Backend for UpdateTask uses this
+    formData.append('status', status); 
 
     try {
         let response;
         if (currentTaskId) {
-            // Update existing task
             response = await fetch(`${API_BASE_URL}/task/${currentTaskId}`, {
                 method: 'PUT',
                 body: formData,
                 credentials: 'include'
             });
         } else {
-            // Create new task
             response = await fetch(`${API_BASE_URL}/task`, {
                 method: 'POST',
                 body: formData,
@@ -351,26 +344,23 @@ async function saveTaskChanges() {
 
         const savedTask = await response.json();
 
-        // Handle subtasks separately
         await Promise.all(subtasksData.map(async (subtask) => {
+            const subtaskFormData = new FormData();
+            subtaskFormData.append('title', subtask.title);
+
             if (subtask.id) {
-                // Update existing subtask
+                subtaskFormData.append('status', subtask.status);
                 await fetch(`${API_BASE_URL}/subtask/${subtask.id}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ title: subtask.title, status: subtask.status }),
+                    body: subtaskFormData,
                     credentials: 'include'
                 });
             } else if (subtask.title) {
-                // Create new subtask
+
+                subtaskFormData.append('task_id', savedTask.task.task_id);
                 await fetch(`${API_BASE_URL}/subtask`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ task_id: savedTask.task.task_id, title: subtask.title }),
+                    body: subtaskFormData,
                     credentials: 'include'
                 });
             }
@@ -450,7 +440,7 @@ async function updateSubtaskStatus(subtaskId, newStatus) {
             console.error('Failed to update subtask status:', error);
             alert('Failed to update subtask status.');
         }
-        // Optionally update the UI without a full refresh
+        
     } catch (error) {
         console.error('Error updating subtask status:', error);
         alert('Error updating subtask status.');
