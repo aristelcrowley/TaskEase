@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET_KEY;
 const API_BASE_URL = process.env.API_BASE_URL; 
 
 function isAuth(req, res, next) {
-    const token = req.cookies?.token || extractTokenFromHeader(req);
+    const token = req.cookies?.token;
     if (!token) {
         return res.redirect('/login');
     }
