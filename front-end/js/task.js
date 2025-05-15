@@ -14,6 +14,7 @@ const profileModal = document.getElementById('profileModal');
 const closeProfileModal = document.getElementById('closeProfileModal');
 const cancelProfileEdit = document.getElementById('cancelProfileEdit');
 const saveProfileChanges = document.getElementById('saveProfileChanges');
+const usernameDisplay = document.getElementById('username');
 
 function getUserIdFromTokenCookie() {
     const token = getCookie('token');
@@ -35,8 +36,34 @@ function getUserIdFromTokenCookie() {
     return null;
 }
 
+async function fetchUsername() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user`, { 
+            credentials: 'include'
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('Failed to fetch user info:', error);
+            usernameDisplay.textContent = 'User'; // Default name if fetch fails
+            return;
+        }
+        const userData = await response.json();
+        if (userData && userData.username) { // Adjust 'username' to the actual field
+            usernameDisplay.textContent = userData.username;
+        } else if (userData && userData.name) { // Check for 'name' as a fallback
+            usernameDisplay.textContent = userData.name;
+        } else {
+            usernameDisplay.textContent = 'User';
+            console.warn('Username or name not found in user data.');
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+        usernameDisplay.textContent = 'User'; // Default name on error
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-    const projectLink = document.querySelector('.nav-items a[href="/project/:user_id"]');
+    const projectLink = document.getElementById('project-link');
     if (projectLink) {
         projectLink.addEventListener('click', function(event) {
             event.preventDefault();
@@ -46,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.location.href = this.href;
             } else {
                 console.error('User ID not found in token cookie.');
-                // Optionally redirect to login or show an error
             }
         });
     }
@@ -65,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const historyLink = document.querySelector('.nav-items a[href="/history"]');
+    const historyLink = document.getElementById('history-link');
     if (historyLink) {
         historyLink.addEventListener('click', function(event) {
             event.preventDefault();
@@ -75,16 +101,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.location.href = this.href;
             } else {
                 console.error('User ID not found in token cookie.');
-                // Optionally redirect to login or show an error
             }
         });
     }
-
-    init(); // Call the existing init function after setting up the listeners
+    init(); 
 });
 
 function init() {
-    // Extract project ID from the URL
     const pathSegments = window.location.pathname.split('/');
     currentProjectId = pathSegments[pathSegments.indexOf('task') + 1];
 
@@ -95,10 +118,9 @@ function init() {
 
     fetchTasks(currentProjectId);
     setupEventListeners();
-    setupProfileEventListeners();
+    fetchUsername();
 }
 
-// Function to get the value of a specific cookie
 const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -196,31 +218,6 @@ function setupEventListeners() {
 
     if (addSubtaskBtn) {
         addSubtaskBtn.addEventListener('click', addSubtask);
-    }
-}
-
-function setupProfileEventListeners() {
-    const profileElement = document.querySelector('.profile');
-    if (profileElement) {
-        profileElement.addEventListener('click', openProfileModal);
-    }
-
-    if (closeProfileModal) {
-        closeProfileModal.addEventListener('click', closeProfileModalFunc);
-    }
-
-    if (cancelProfileEdit) {
-        cancelProfileEdit.addEventListener('click', closeProfileModalFunc);
-    }
-
-    window.addEventListener('click', (event) => {
-        if (event.target === profileModal) {
-            closeProfileModalFunc();
-        }
-    });
-
-    if (saveProfileChanges) {
-        saveProfileChanges.addEventListener('click', saveProfileFunc);
     }
 }
 

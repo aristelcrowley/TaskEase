@@ -15,13 +15,13 @@
                     <img src="/assets/images/mari.jpg" alt="Profile">
                 </div>
                 <div class="profile-info">
-                    <h3>Aristel</h3>
+                    <h3 id="username"></h3>
                 </div>
             </div>
 
             <ul class="nav-items">
                 <li class="active">
-                    <a href="/project/:user_id">
+                    <a href="/project" id="project-link">
                         <div class="icon"><i class="fas fa-clipboard"></i></div>
                         <span>Projects</span>
                     </a>
@@ -33,7 +33,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/history">
+                    <a href="/history" id="history-link">
                         <div class="icon"><i class="fas fa-history"></i></div>
                         <span>History</span>
                     </a>
@@ -54,73 +54,42 @@
         </main>
     </div>
 
-<div id="task-modal" class="modal2">
-    <div class="modal-content2">
-        <div class="modal-header2">
-            <h2>Task Details</h2>
-            <span class="close-modal2">&times;</span>
-        </div>
-        <div class="modal-body2">
-            <div class="form-group2">
-                <label for="task-name">Task Name</label>
-                <input type="text" id="task-name" placeholder="Enter task name">
+    <div id="task-modal" class="modal2">
+        <div class="modal-content2">
+            <div class="modal-header2">
+                <h2>Task Details</h2>
+                <span class="close-modal2">&times;</span>
             </div>
-
-            <div class="form-group2">
-                <label>Subtasks</label>
-                <div id="subtasks-container">
-                    </div>
-                <button id="add-subtask-btn" class="btn-secondary2">
-                    <i class="fas fa-plus"></i> Add Subtask
-                </button>
-            </div>
-
-            <div class="form-group2">
-                <label for="task-deadline">Deadline</label>
-                <input type="date" id="task-deadline">
-            </div>
-
-            <div class="form-group2">
-                <label class="checkbox-container2">Mark as Complete
-                    <input type="checkbox" id="task-complete">
-                    <span class="checkmark2"></span>
-                </label>
-            </div>
-        </div>
-        <div class="modal-footer2">
-            <button id="delete-task-btn" class="btn-danger2">Delete Task</button>
-            <button id="save-task-btn" class="btn-primary2">Save Changes</button>
-        </div>
-    </div>
-</div>
-
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Edit Profile</h3>
-                <span class="close-btn" id="closeProfileModal">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="newUsername">Username</label>
-                    <input type="text" id="newUsername" placeholder="Enter new username">
+            <div class="modal-body2">
+                <div class="form-group2">
+                    <label for="task-name">Task Name</label>
+                    <input type="text" id="task-name" placeholder="Enter task name">
                 </div>
-                <div class="form-group">
-                    <label for="currentPassword">Current Password</label>
-                    <input type="password" id="currentPassword" placeholder="Enter current password">
+
+                <div class="form-group2">
+                    <label>Subtasks</label>
+                    <div id="subtasks-container">
+                        </div>
+                    <button id="add-subtask-btn" class="btn-secondary2">
+                        <i class="fas fa-plus"></i> Add Subtask
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label for="newPassword">New Password</label>
-                    <input type="password" id="newPassword" placeholder="Enter new password">
+
+                <div class="form-group2">
+                    <label for="task-deadline">Deadline</label>
+                    <input type="date" id="task-deadline">
                 </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" placeholder="Confirm new password">
+
+                <div class="form-group2">
+                    <label class="checkbox-container2">Mark as Complete
+                        <input type="checkbox" id="task-complete">
+                        <span class="checkmark2"></span>
+                    </label>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-cancel" id="cancelProfileEdit">Cancel</button>
-                <button class="btn-save" id="saveProfileChanges">Save Changes</button>
+            <div class="modal-footer2">
+                <button id="delete-task-btn" class="btn-danger2">Delete Task</button>
+                <button id="save-task-btn" class="btn-primary2">Save Changes</button>
             </div>
         </div>
     </div>

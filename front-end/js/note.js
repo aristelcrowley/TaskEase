@@ -53,6 +53,32 @@ async function fetchNotes() {
     }
 }
 
+async function fetchUsername() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user`, { 
+            credentials: 'include'
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('Failed to fetch user info:', error);
+            usernameDisplay.textContent = 'User'; // Default name if fetch fails
+            return;
+        }
+        const userData = await response.json();
+        if (userData && userData.username) { // Adjust 'username' to the actual field
+            usernameDisplay.textContent = userData.username;
+        } else if (userData && userData.name) { // Check for 'name' as a fallback
+            usernameDisplay.textContent = userData.name;
+        } else {
+            usernameDisplay.textContent = 'User';
+            console.warn('Username or name not found in user data.');
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+        usernameDisplay.textContent = 'User'; // Default name on error
+    }
+}
+
 function createNoteElement(note) {
     const noteCard = document.createElement('div');
     noteCard.classList.add('note-card');
@@ -237,29 +263,6 @@ cancelEditNoteBtn.addEventListener('click', () => {
 
 updateNoteBtn.addEventListener('click', updateNote);
 
-profileBtn.addEventListener('click', () => {
-    profileModal.style.display = 'block';
-});
-
-closeProfileModal.addEventListener('click', () => {
-    profileModal.style.display = 'none';
-});
-
-cancelProfileEditBtn.addEventListener('click', () => {
-    profileModal.style.display = 'none';
-});
-
-saveProfileChangesBtn.addEventListener('click', () => {
-    const newUsername = newUsernameInput.value;
-    const currentPassword = document.getElementById('currentPassword').value;
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
-    console.log('Saving profile changes:', { newUsername, currentPassword, newPassword, confirmPassword });
-    alert('Profile changes saved (placeholder - implement actual API call).');
-    profileModal.style.display = 'none';
-});
-
 window.addEventListener('click', (event) => {
     if (event.target === noteModal) {
         noteModal.style.display = 'none';
@@ -294,39 +297,42 @@ function getUserIdFromTokenCookie() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const projectLink = document.querySelector('.nav-items a[href="/tasks"]');
+    const projectLink = document.getElementById('project-link');
     if (projectLink) {
         projectLink.addEventListener('click', function(event) {
             event.preventDefault();
             const userId = getUserIdFromTokenCookie();
             if (userId) {
-                window.location.href = `/project/${userId}`;
+                this.href = `/project/${userId}`;
+                window.location.href = this.href;
             } else {
                 console.error('User ID not found in token cookie.');
             }
         });
     }
 
-    const noteLink = document.querySelector('.nav-items a[href="/note"]');
+    const noteLink = document.getElementById('note-link');
     if (noteLink) {
         noteLink.addEventListener('click', function(event) {
             event.preventDefault();
             const userId = getUserIdFromTokenCookie();
             if (userId) {
-                window.location.href = `/note/${userId}`;
+                this.href = `/note/${userId}`;
+                window.location.href = this.href;
             } else {
                 console.error('User ID not found in token cookie.');
             }
         });
     }
 
-    const historyLink = document.querySelector('.nav-items a[href="/history"]');
+    const historyLink = document.getElementById('history-link');
     if (historyLink) {
         historyLink.addEventListener('click', function(event) {
             event.preventDefault();
             const userId = getUserIdFromTokenCookie();
             if (userId) {
-                window.location.href = `/history/${userId}`;
+                this.href = `/history/${userId}`;
+                window.location.href = this.href;
             } else {
                 console.error('User ID not found in token cookie.');
             }
@@ -334,5 +340,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     fetchNotes();
-    // setupProfileModal(); // If you have a function to set up profile modal data
+    fetchUsername();
 });

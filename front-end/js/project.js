@@ -10,6 +10,7 @@ const cancelProjectBtn = document.getElementById('cancelProjectEdit');
 const errorModal = document.getElementById('errorModal');
 const errorMessageDisplay = document.getElementById('errorMessage');
 const closeErrorModalBtn = document.getElementById('closeErrorModalBtn');
+const usernameDisplay = document.getElementById('username');
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
@@ -47,6 +48,32 @@ function getUserIdFromTokenCookie() {
         }
     }
     return null;
+}
+
+async function fetchUsername() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user`, { 
+            credentials: 'include'
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('Failed to fetch user info:', error);
+            usernameDisplay.textContent = 'User'; // Default name if fetch fails
+            return;
+        }
+        const userData = await response.json();
+        if (userData && userData.username) { // Adjust 'username' to the actual field
+            usernameDisplay.textContent = userData.username;
+        } else if (userData && userData.name) { // Check for 'name' as a fallback
+            usernameDisplay.textContent = userData.name;
+        } else {
+            usernameDisplay.textContent = 'User';
+            console.warn('Username or name not found in user data.');
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+        usernameDisplay.textContent = 'User'; // Default name on error
+    }
 }
 
 async function fetchProjects() {
@@ -271,19 +298,19 @@ function setupProfileModal() {
 
 document.addEventListener('DOMContentLoaded', function () {
     fetchProjects();
-    setupProfileModal();
     setupProjectModal();
+    fetchUsername();
 
     const projectLink = document.getElementById('project-link');
     if (projectLink) {
         projectLink.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent the default navigation
+            event.preventDefault();
             const userId = getUserIdFromTokenCookie();
             if (userId) {
-                window.location.href = `/project/${userId}`;
+                this.href = `/project/${userId}`;
+                window.location.href = this.href;
             } else {
                 console.error('User ID not found in token cookie.');
-                // Optionally redirect to login or show an error
             }
         });
     }
@@ -305,13 +332,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const historyLink = document.getElementById('history-link');
     if (historyLink) {
         historyLink.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default navigation
+            event.preventDefault();
             const userId = getUserIdFromTokenCookie();
             if (userId) {
-                window.location.href = `/history/${userId}`;
+                this.href = `/history/${userId}`;
+                window.location.href = this.href;
             } else {
                 console.error('User ID not found in token cookie.');
-                // Optionally redirect to login or show an error
             }
         });
     }
