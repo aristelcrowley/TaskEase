@@ -37,11 +37,6 @@ body {
     cursor: pointer;
 }
 
-.profile:hover {
-    background-color: #e6e6e6;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
 .profile-img {
     width: 50px;
     height: 50px;
@@ -56,30 +51,9 @@ body {
     object-fit: cover;
 }
 
-.profile:hover .profile-img {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 2px #f1c40f;
-}
-
 .profile-info h3 {
     font-size: 16px;
     color: #2c2c2c;
-}
-
-.profile:hover .profile-info h3 {
-    color: #f1c40f;
-}
-
-.profile:hover::after {
-    content: "Edit profile";
-    position: absolute;
-    right: 20px;
-    font-size: 12px;
-    color: #777;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 3px 8px;
-    border-radius: 4px;
-    opacity: 0.8;
 }
 
 /* Navigation (reused from project.css) */
