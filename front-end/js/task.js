@@ -59,10 +59,6 @@ async function fetchTasks(projectId) {
 
 function renderTasks(tasks) {
     tasksContainer.innerHTML = '';
-    if (tasks.length === 0) {
-        tasksContainer.innerHTML = '<p>No tasks for this project yet.</p>';
-        return;
-    }
     tasks.forEach(task => {
         console.log('Task ID in renderTasks:', task.task_id); // Debugging log
         const taskCard = document.createElement('div');
@@ -168,11 +164,15 @@ function openNewTaskModal() {
     document.getElementById('task-name').value = '';
     document.getElementById('task-deadline').value = '';
     document.getElementById('task-complete').checked = false;
+
+    const completeGroup = document.querySelector('.modal-body2 > .form-group2:nth-child(4)');
+    
+    if (completeGroup) {
+        completeGroup.style.display = 'none';
+    }
+    
     subtasksContainer.innerHTML = '';
 
-    if (deleteTaskBtn) {
-        deleteTaskBtn.style.display = 'none';
-    }
     
     if (deleteTaskBtn) {
         deleteTaskBtn.style.display = 'none';
@@ -298,7 +298,12 @@ async function saveTaskChanges() {
         return;
     }
 
-    const taskDeadline = document.getElementById('task-deadline').value;
+    const taskDeadlineInput = document.getElementById('task-deadline').value;
+    if (!taskDeadlineInput) {
+        alert('Please select a deadline for the task');
+        return;
+    }
+    const taskDeadline = taskDeadlineInput; 
     const taskComplete = document.getElementById('task-complete').checked;
     const status = taskComplete ? 'Completed' : 'Pending';
 
