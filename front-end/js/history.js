@@ -24,7 +24,7 @@ function getUserIdFromTokenCookie() {
             }).join(''));
 
             const payload = JSON.parse(jsonPayload);
-            return payload.user_id; // Assuming your JWT payload has 'user_id'
+            return payload.user_id; 
         } catch (error) {
             console.error('Error decoding JWT:', error);
             return null;
