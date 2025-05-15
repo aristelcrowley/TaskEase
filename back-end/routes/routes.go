@@ -22,7 +22,7 @@ func SetupRoutes(app *fiber.App) {
     protected.Get("/project/check-ownership/:project_id", controllers.CheckProjectOwnership)
 
 	protected.Post("/task", controllers.CreateTask)
-	protected.Get("/task/:project_id", controllers.GetTasks)
+	protected.Get("/tasks/:project_id", controllers.GetTasks)
 	protected.Get("/task/:task_id", controllers.GetTaskByID)
 	protected.Put("/task/:task_id", controllers.UpdateTask)
 	protected.Delete("/task/:task_id", controllers.DeleteTask)

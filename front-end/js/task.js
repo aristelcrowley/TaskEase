@@ -43,7 +43,7 @@ const getCookie = (name) => {
 
 async function fetchTasks(projectId) {
     try {
-        const response = await fetch(`${API_BASE_URL}/task/${projectId}`, {
+        const response = await fetch(`${API_BASE_URL}/tasks/${projectId}`, {
             credentials: 'include'
         });
         if (!response.ok) {
