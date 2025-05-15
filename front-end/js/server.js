@@ -30,6 +30,10 @@ app.get("/task/:project_id", isProjectPageAuth, (req, res) => {
     res.sendFile(path.join(__dirname, "../", "task.html"));
 });
 
+app.get("/history/:user_id", isAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, "../", "history.html"));
+});
+
 app.use(express.static(path.join(__dirname, "../")));
 
 app.use((req, res) => {

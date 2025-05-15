@@ -15,6 +15,60 @@ const closeProfileModal = document.getElementById('closeProfileModal');
 const cancelProfileEdit = document.getElementById('cancelProfileEdit');
 const saveProfileChanges = document.getElementById('saveProfileChanges');
 
+function getUserIdFromTokenCookie() {
+    const token = getCookie('token');
+    if (token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            const payload = JSON.parse(jsonPayload);
+            return payload.user_id; // Assuming your JWT payload has 'user_id'
+        } catch (error) {
+            console.error('Error decoding JWT:', error);
+            return null;
+        }
+    }
+    return null;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const projectLink = document.querySelector('.nav-items a[href="/project/:user_id"]');
+    if (projectLink) {
+        projectLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            const userId = getUserIdFromTokenCookie();
+            if (userId) {
+                this.href = `/project/${userId}`;
+                window.location.href = this.href;
+            } else {
+                console.error('User ID not found in token cookie.');
+                // Optionally redirect to login or show an error
+            }
+        });
+    }
+
+    const historyLink = document.querySelector('.nav-items a[href="/history"]');
+    if (historyLink) {
+        historyLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            const userId = getUserIdFromTokenCookie();
+            if (userId) {
+                this.href = `/history/${userId}`;
+                window.location.href = this.href;
+            } else {
+                console.error('User ID not found in token cookie.');
+                // Optionally redirect to login or show an error
+            }
+        });
+    }
+
+    init(); // Call the existing init function after setting up the listeners
+});
+
 function init() {
     // Extract project ID from the URL
     const pathSegments = window.location.pathname.split('/');

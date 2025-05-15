@@ -23,14 +23,39 @@ function closeErrorModal() {
     errorModal.style.display = 'none';
 }
 
-// Function to fetch projects from the API
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function getUserIdFromTokenCookie() {
+    const token = getCookie('token');
+    if (token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            const payload = JSON.parse(jsonPayload);
+            return payload.user_id; 
+        } catch (error) {
+            console.error('Error decoding JWT:', error);
+            return null;
+        }
+    }
+    return null;
+}
+
 async function fetchProjects() {
     try {
         const response = await fetch(`${API_BASE_URL}/project`, {
             headers: {
                 'Content-Type': 'application/json'
             },
-            credentials: 'include' // Include cookies in the request
+            credentials: 'include' 
         });
 
         if (!response.ok) {
@@ -248,6 +273,34 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchProjects();
     setupProfileModal();
     setupProjectModal();
+
+    const projectLink = document.getElementById('project-link');
+    if (projectLink) {
+        projectLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default navigation
+            const userId = getUserIdFromTokenCookie();
+            if (userId) {
+                window.location.href = `/project/${userId}`;
+            } else {
+                console.error('User ID not found in token cookie.');
+                // Optionally redirect to login or show an error
+            }
+        });
+    }
+
+    const historyLink = document.getElementById('history-link');
+    if (historyLink) {
+        historyLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default navigation
+            const userId = getUserIdFromTokenCookie();
+            if (userId) {
+                window.location.href = `/history/${userId}`;
+            } else {
+                console.error('User ID not found in token cookie.');
+                // Optionally redirect to login or show an error
+            }
+        });
+    }
 
     addProjectBtn.addEventListener('click', openAddProjectModal);
     closeErrorModalBtn.addEventListener('click', closeErrorModal);
