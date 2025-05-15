@@ -33,6 +33,32 @@ function getUserIdFromTokenCookie() {
     return null;
 }
 
+async function fetchUsername() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user`, { 
+            credentials: 'include'
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('Failed to fetch user info:', error);
+            usernameDisplay.textContent = 'User'; // Default name if fetch fails
+            return;
+        }
+        const userData = await response.json();
+        if (userData && userData.username) { // Adjust 'username' to the actual field
+            usernameDisplay.textContent = userData.username;
+        } else if (userData && userData.name) { // Check for 'name' as a fallback
+            usernameDisplay.textContent = userData.name;
+        } else {
+            usernameDisplay.textContent = 'User';
+            console.warn('Username or name not found in user data.');
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+        usernameDisplay.textContent = 'User'; // Default name on error
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const projectLink = document.getElementById('project-link');
     if (projectLink) {
@@ -76,8 +102,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    fetchTaskHistory(); // Call fetchTaskHistory when the page loads
-    setupProfileModal();
+    fetchTaskHistory(); 
+    fetchUsername();
 });
 
 async function fetchTaskHistory() {
@@ -182,51 +208,4 @@ function renderTaskHistory(tasks) {
 
         historyListContainer.appendChild(historyGroup);
     }
-}
-
-function setupProfileModal() {
-    const profileSection = document.getElementById('profileSection');
-
-    profileSection.addEventListener('click', function () {
-        newUsernameInput.value = usernameDisplay.textContent;
-        profileModal.style.display = 'block';
-    });
-
-    function closeModal() {
-        profileModal.style.display = 'none';
-    }
-
-    closeProfileModal.addEventListener('click', closeModal);
-    cancelProfileEdit.addEventListener('click', closeModal);
-
-    saveProfileChanges.addEventListener('click', function () {
-        const newUsername = newUsernameInput.value.trim();
-        const currentPassword = document.getElementById('currentPassword').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-
-        if (!newUsername) {
-            alert('Username cannot be empty');
-            return;
-        }
-
-        if (newPassword && newPassword !== confirmPassword) {
-            alert('New passwords do not match');
-            return;
-        }
-
-        usernameDisplay.textContent = newUsername;
-        alert('Profile updated successfully!');
-        closeModal();
-
-        document.getElementById('currentPassword').value = '';
-        document.getElementById('newPassword').value = '';
-        document.getElementById('confirmPassword').value = '';
-    });
-
-    window.addEventListener('click', function (event) {
-        if (event.target === profileModal) {
-            closeModal();
-        }
-    });
 }

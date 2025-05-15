@@ -15,6 +15,8 @@ func SetupRoutes(app *fiber.App) {
 
 	protected.Post("/logout", controllers.Logout)
 
+    protected.Get("/user", controllers.GetUserByID)
+
     protected.Post("/project", controllers.CreateProject)
     protected.Get("/project", controllers.GetProjects)
     protected.Put("/project/:project_id", controllers.UpdateProject)
@@ -37,10 +39,4 @@ func SetupRoutes(app *fiber.App) {
     protected.Get("/note", controllers.GetNotes)
     protected.Put("/note/:note_id", controllers.UpdateNote)
     protected.Delete("/note/:note_id", controllers.DeleteNote)
-
-    admin := protected.Group("/user", middlewares.IsAdmin)
-    admin.Post("/", controllers.CreateUser)
-    admin.Get("/", controllers.GetUsers)
-    admin.Put("/:id", controllers.UpdateUser)
-    admin.Delete("/:id", controllers.DeleteUser)
 }
