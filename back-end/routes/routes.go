@@ -33,6 +33,11 @@ func SetupRoutes(app *fiber.App) {
     protected.Put("/subtask/:subtask_id", controllers.UpdateSubtask)
     protected.Delete("/subtask/:subtask_id", controllers.DeleteSubtask)
 
+    protected.Post("/note", controllers.CreateNote)
+    protected.Get("/note", controllers.GetNotes)
+    protected.Put("/note/:note_id", controllers.UpdateNote)
+    protected.Delete("/note/:note_id", controllers.DeleteNote)
+
     admin := protected.Group("/user", middlewares.IsAdmin)
     admin.Post("/", controllers.CreateUser)
     admin.Get("/", controllers.GetUsers)
