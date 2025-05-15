@@ -29,13 +29,3 @@ func VerifyToken() fiber.Handler {
 		},
 	})
 }
-
-func IsAdmin(c *fiber.Ctx) error {
-	role := c.Locals("role")
-	if role != "admin" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"error": "Admin access required",
-		})
-	}
-	return c.Next()
-}
