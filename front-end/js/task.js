@@ -25,10 +25,6 @@ function init() {
         return;
     }
 
-    setTimeout(() => { // Add this temporary delay
-        fetchTasks(currentProjectId);
-    }, 3000); // Wait for 3 seconds
-
     fetchTasks(currentProjectId);
     setupEventListeners();
     setupProfileEventListeners();
@@ -42,6 +38,7 @@ const getCookie = (name) => {
 };
 
 async function fetchTasks(projectId) {
+    tasksContainer.innerHTML = ''; 
     try {
         const response = await fetch(`${API_BASE_URL}/tasks/${projectId}`, {
             credentials: 'include'
@@ -75,7 +72,6 @@ function renderTasks(tasks) {
         taskCard.innerHTML = `
             <div class="task-header">
                 <h3 class="task-title">${task.task_name}</h3>
-                <span class="task-status status-${task.status.toLowerCase()}">${task.status}</span>
             </div>
             <div class="task-details">
                 <p><strong>Deadline:</strong> ${formatDate(task.deadline)}</p>
@@ -174,6 +170,10 @@ function openNewTaskModal() {
     document.getElementById('task-complete').checked = false;
     subtasksContainer.innerHTML = '';
 
+    if (deleteTaskBtn) {
+        deleteTaskBtn.style.display = 'none';
+    }
+    
     if (deleteTaskBtn) {
         deleteTaskBtn.style.display = 'none';
     }

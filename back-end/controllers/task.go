@@ -72,44 +72,38 @@ func CreateTask(c *fiber.Ctx) error {
 }
 
 func GetTasks(c *fiber.Ctx) error {
-	userID := c.Locals("user_id").(int)
+    userID := c.Locals("user_id").(int)
 
-	projectIDStr := c.Params("project_id")
-	projectID, err := strconv.Atoi(projectIDStr)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid project ID",
-		})
-	}
+    projectIDStr := c.Params("project_id")
+    projectID, err := strconv.Atoi(projectIDStr)
+    if err != nil {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "error": "Invalid project ID",
+        })
+    }
 
-	var project models.Project
-	if err := database.DB.First(&project, "project_id = ?", projectID).Error; err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Project not found",
-		})
-	}
-	if project.UserID != userID {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"error": "You do not have permission to view tasks for this project",
-		})
-	}
+    var project models.Project
+    if err := database.DB.First(&project, "project_id = ?", projectID).Error; err != nil {
+        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+            "error": "Project not found",
+        })
+    }
+    if project.UserID != userID {
+        return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+            "error": "You do not have permission to view tasks for this project",
+        })
+    }
 
-	var tasks []models.Task
-	if err := database.DB.Where("project_id = ? AND status = ?", projectID, "Pending").Find(&tasks).Error; err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to retrieve tasks",
-		})
-	}
+    var tasks []models.Task
+    if err := database.DB.Where("project_id = ? AND status = ?", projectID, "Pending").Find(&tasks).Error; err != nil {
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "error": "Failed to retrieve tasks",
+        })
+    }
 
-	if len(tasks) == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"message": "Task tidak tersedia",
-		})
-	}
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"tasks": tasks,
-	})
+    return c.Status(fiber.StatusOK).JSON(fiber.Map{
+        "tasks": tasks,
+    })
 }
 
 func GetTaskByID(c *fiber.Ctx) error {
