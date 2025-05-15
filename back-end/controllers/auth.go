@@ -40,7 +40,6 @@ func Register(c *fiber.Ctx) error {
 	newUser := models.User{
 		Username: username,
 		Password: string(hashedPassword), // Store the hash as a string
-		Role:     "user",
 	}
 
 	if err := database.DB.Create(&newUser).Error; err != nil {
@@ -78,7 +77,6 @@ func Login(c *fiber.Ctx) error {
 
 	claims := jwt.MapClaims{
 		"user_id": user.UserID,
-		"role":    user.Role,
 		"exp":     time.Now().Add(time.Hour * 3).Unix(),
 	}
 

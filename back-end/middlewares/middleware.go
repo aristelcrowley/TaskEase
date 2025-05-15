@@ -20,10 +20,6 @@ func VerifyToken() fiber.Handler {
 				c.Locals("user_id", int(idFloat))
 			}
 
-			if role, ok := claims["role"].(string); ok {
-				c.Locals("role", role)
-			}
-
 			return c.Next()
 		},
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
