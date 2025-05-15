@@ -11,7 +11,8 @@ import (
 func VerifyToken() fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SigningKey:  []byte(os.Getenv("JWT_SECRET_KEY")),
-		TokenLookup: "cookie:token",
+		TokenLookup:   "cookie:token, header:Authorization:Bearer ",
+		AuthScheme:    "Bearer ",
 		SuccessHandler: func(c *fiber.Ctx) error {
 			user := c.Locals("user").(*jwt.Token)
 			claims := user.Claims.(jwt.MapClaims)

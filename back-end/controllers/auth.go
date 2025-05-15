@@ -95,9 +95,9 @@ func Login(c *fiber.Ctx) error {
 		Value:    tokenString,
 		Expires:  time.Now().Add(24 * time.Hour),
 		HTTPOnly: true,
-		Path:     "/", // Make the cookie accessible across the entire domain
-		// Secure:   true, // Uncomment if using HTTPS
-		SameSite: "Lax", // Or "Strict" depending on your needs
+		Path:     "/", 
+		Domain:   "localhost", 
+		SameSite: "Lax", 
 	})
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
