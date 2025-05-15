@@ -254,13 +254,14 @@ func DeleteTask(c *fiber.Ctx) error {
 }
 
 func GetTaskHistory(c *fiber.Ctx) error {
-	userID := c.Locals("user_id").(int)
+	loggedInUserID := c.Locals("user_id").(int)
 
 	var tasks []models.Task
 	if err := database.DB.Joins("JOIN projects ON tasks.project_id = projects.project_id").
-		Where("projects.user_id = ? AND tasks.status = ?", userID, "Completed").
+		Where("projects.user_id = ? AND tasks.status = ?", loggedInUserID, "Completed").
 		Order("tasks.updated_at DESC").
 		Find(&tasks).Error; err != nil {
+			
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to retrieve task history",
 		})
