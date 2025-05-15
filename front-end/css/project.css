@@ -317,3 +317,12 @@ body {
 .btn-edit:hover {
     background-color: #e0a800;
 }
+
+.nav-items li.logout-item {
+    margin-top: 455px;
+}    
+
+.nav-items li.logout-item a {
+    color: #e74c3c; 
+    font-weight: bold; 
+}
