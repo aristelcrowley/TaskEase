@@ -59,7 +59,7 @@ To run TaskEase locally, follow these steps:
     npm install
     ```
 
-7.  **Configure frontend environment variables (if any):**
+7.  **Configure frontend environment variables:**
     Create a `.env` file in your front-end directory then include this:
     ```bash
     API_BASE_URL=http://localhost:your_backend_port
@@ -73,7 +73,7 @@ To run TaskEase locally, follow these steps:
 
 9.  **Open new terminal and navigate to the backend directory:**
     ```bash
-    cd ../backend
+    cd back-end
     ```
 
 10.  **Install backend dependencies:**
@@ -98,7 +98,8 @@ To run TaskEase locally, follow these steps:
     ```bash
     go run main.go
     ```
-13.  **Open browser and navigate to the frontend server:**
+
+14.  **Open browser and navigate to the frontend server:**
     ```bash
     http://localhost:your_frontend_port
     ```
