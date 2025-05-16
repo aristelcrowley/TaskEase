@@ -76,15 +76,15 @@ To run TaskEase locally, follow these steps:
     cd back-end
     ```
 
-10.  **Install backend dependencies:**
+10. **Install backend dependencies:**
     ```bash
     go mod tidy
     ```
 
-11.  **Configure backend environment variables:**
+11. **Configure backend environment variables:**
     Create a `.env` file in your back-end directory then include this:
     ```bash
-    DB_USER=your_username
+    CB_USER=your_username
     DB_PASSWORD=your_password
     DB_NAME=your_imported_database_name
     DB_HOST=localhost
@@ -92,20 +92,20 @@ To run TaskEase locally, follow these steps:
     BE_SERVER_PORT=your_backend_port
     FE_SERVER_PORT=your_frontend_port
     JWT_SECRET_KEY=your_preferred_secret_key (same in the front-end)
-    ```
+     ```
 
-12.  **Run the backend server:**
+12. **Run the backend server:**
     ```bash
     go run main.go
     ```
-
-14.  **Open browser and navigate to the frontend server:**
+    
+13. **Open browser and navigate to the frontend server:**
     ```bash
     http://localhost:your_frontend_port
     ```
 
 
-## API Endpoints (Backend - Go Fiber)
+## API Endpoints 
 Protected API (Requires JWT Token) starts with /api.
 
 
@@ -151,5 +151,5 @@ Protected API (Requires JWT Token) starts with /api.
 * `DELETE /api/note/:note_id`: Delete an existing note.
 
 
-## API Endpoints (Testing)
+##  Software Testing (Postman)
 > https://documenter.getpostman.com/view/40551639/2sB2qWGPti
